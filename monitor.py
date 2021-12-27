@@ -52,8 +52,7 @@ def monitor(args):
             html_str = """
             <table border=1>
             <caption, border=1,align=left>Ezil Address</caption>
-                <tr><td>ETH</td><td>0x27715afc5d876bc6f6c264be6a737d685c2aeec9</td></tr>
-                <tr><td>Ezil</td><td>zil1mr0ng7kmhc5krkrry5t3zq6pjvsd5v4asutql5</td></tr>
+                <tr><td>ETH</td><td>0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF</td></tr>
             </table>
             <br />
             <table border=1>
@@ -71,9 +70,9 @@ def monitor(args):
             </table>
             """
 
-            import requests
+            #import requests
 
-            url = "https://billing.ezil.me/balances/0x27715afc5d876bc6f6c264be6a737d685c2aeec9.zil1mr0ng7kmhc5krkrry5t3zq6pjvsd5v4asutql5"
+            url = "https://billing.ezil.me/balances/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF"
 
             payload = {}
             headers = {}
@@ -86,17 +85,12 @@ def monitor(args):
                 last_eth_balance = eth_balance
                 eth_balance = dict['eth']
                 updatedTime = datetime.datetime.now()
-            if zil_balance!=dict['zil']:
-                last_zil_balance=zil_balance
-                zil_balance=dict['zil']
-                updatedTime = datetime.datetime.now()
 
             rows = ''
             rows = rows + '<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>'.format('ETH Balance', eth_balance,last_eth_balance)
-            rows = rows + '<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>'.format('ZIL Balance', zil_balance,last_zil_balance)
 
 
-            url="https://stats.ezil.me/current_stats/0x27715afc5d876bc6f6c264be6a737d685c2aeec9.zil1mr0ng7kmhc5krkrry5t3zq6pjvsd5v4asutql5/workers/stats?coin=eth"
+            url="https://stats.ezil.me/current_stats/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF/workers/stats?coin=eth"
             response = requests.request("GET", url, headers=headers, data=payload)
             dict = json.loads(response.text)
 
