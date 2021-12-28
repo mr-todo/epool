@@ -45,7 +45,7 @@ def monitor(args):
         last_reported_hashrate='0'
         last_online_count='0'
         updatedTime=datetime.datetime.now()
-        while (True):
+        while True:
             start_time = time.time()
 
             logger.info('start new round of monitor')
@@ -77,7 +77,11 @@ def monitor(args):
             payload = {}
             headers = {}
 
-            response = requests.request("GET", url, headers=headers, data=payload)
+            try:
+                response = requests.request("GET", url, headers=headers, data=payload)
+            except:
+                print("Oops!", sys.exc_info()[0], "occurred.")
+                continue
 
             dict = json.loads(response.text)
 
@@ -91,7 +95,12 @@ def monitor(args):
 
 
             url="https://stats.ezil.me/current_stats/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF/workers/stats?coin=eth"
-            response = requests.request("GET", url, headers=headers, data=payload)
+            try:
+                response = requests.request("GET", url, headers=headers, data=payload)
+            except:
+                print("Oops!", sys.exc_info()[0], "occurred.")
+                continue
+
             dict = json.loads(response.text)
 
             if current_hashrate!=dict['current_hashrate']:
