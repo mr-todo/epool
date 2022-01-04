@@ -76,25 +76,21 @@ def monitor(args):
             </table>
             """
 
-            # import requests
-
-
-            url = "https://billing.ezil.me/balances/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF"
-
             payload = {}
             headers = {}
 
-            try:
-                response = requests.request("GET", url, headers=headers, data=payload)
-                dict = json.loads(response.text)
-
-                if eth_balance != dict['eth']:
-                    last_eth_balance = eth_balance
-                    eth_balance = dict['eth']
-                    updatedTime = datetime.datetime.now()
-            except:
-                print("Oops!", sys.exc_info()[0], "occurred.")
-                continue
+            # url = "https://billing.ezil.me/balances/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF"
+            # try:
+            #     response = requests.request("GET", url, headers=headers, data=payload)
+            #     dict = json.loads(response.text)
+            #
+            #     if eth_balance != dict['eth']:
+            #         last_eth_balance = eth_balance
+            #         eth_balance = dict['eth']
+            #         updatedTime = datetime.datetime.now()
+            # except:
+            #     print("Oops!", sys.exc_info()[0], "occurred.")
+            #     continue
 
             url = "https://billing.ezil.me/v2/accounts/0xd100eA705Bf62fbB5F07daB652f52A0D2f0a1FBF"
             try:
@@ -103,10 +99,11 @@ def monitor(args):
 
                 if eth_balance != dict['balances'][0]['amount']:
                     last_eth_balance = eth_balance
-                    eth_balance = dict['balances'][0]['amount']
+                    eth_balance = round(dict['balances'][0]['amount'], 6)
                     updatedTime = datetime.datetime.now()
-                time_to_payout = '{0} hours'.format(float(dict['balances'][0]['payout']['time_to_reach_min_payout']) / 3600)
-                gas_price = str(dict['balances'][0]['payout']['current_gas_price'])
+                time_to_payout = '{0} hours'.format(
+                    round(float(dict['balances'][0]['payout']['time_to_reach_min_payout']) / 3600, 2))
+                gas_price = str(round(dict['balances'][0]['payout']['current_gas_price'], 0))
             except:
                 print("Oops!", sys.exc_info()[0], "occurred.")
                 continue
@@ -140,12 +137,12 @@ def monitor(args):
                 print("Oops!", sys.exc_info()[0], "occurred.")
                 continue
 
-            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('30 min', float(
-                current_hashrate) / 1000000, float(last_current_hashrate) / 1000000)
-            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('3 hour', float(
-                average_hashrate) / 1000000, float(last_average_hashrate) / 1000000)
-            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('Reported', float(
-                reported_hashrate) / 1000000, float(last_reported_hashrate) / 1000000)
+            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('30 min', round(float(
+                current_hashrate) / 1000000, 2), round(float(last_current_hashrate) / 1000000, 2))
+            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('3 hour', round(float(
+                average_hashrate) / 1000000, 2), round(float(last_average_hashrate) / 1000000, 2))
+            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('Reported', round(float(
+                reported_hashrate) / 1000000, 2), round(float(last_reported_hashrate) / 1000000, 2))
             rows = rows + '<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>'.format('Worker Status', online_count,
                                                                                  last_online_count)
 
@@ -171,7 +168,6 @@ def monitor(args):
     except Exception as e:
         logger.exception('error in monitor')
         return 1
-
 
 r = monitor(sys.argv[1:])
 sys.exit(r)
