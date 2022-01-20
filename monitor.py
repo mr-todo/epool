@@ -103,7 +103,8 @@ def monitor(args):
                     updatedTime = datetime.datetime.now()
                 time_to_payout = '{0} hours'.format(
                     round(float(dict['balances'][0]['payout']['time_to_reach_min_payout']) / 3600, 2))
-                gas_price = str(round(dict['balances'][0]['payout']['current_gas_price'], 0))
+                if dict['balances'][0]['payout']['current_gas_price'] is not None:
+                    gas_price = str(round(dict['balances'][0]['payout']['current_gas_price'], 0))
             except:
                 print("Oops!", sys.exc_info()[0], "occurred.")
                 continue
