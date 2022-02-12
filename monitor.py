@@ -38,6 +38,7 @@ def monitor(args):
         eth_balance = '0'
         current_hashrate = '0'
         average_hashrate = '0'
+        daily_hashrate = '0'
         reported_hashrate = '0'
         online_count = '0'
         last_eth_balance = '0'
@@ -126,6 +127,10 @@ def monitor(args):
                     last_average_hashrate = average_hashrate
                     average_hashrate = dict['average_hashrate']
                     updatedTime = datetime.datetime.now()
+                if daily_hashrate != dict['daily_hashrate']:
+                    last_daily_hashrate = daily_hashrate
+                    daily_hashrate = dict['daily_hashrate']
+                    updatedTime = datetime.datetime.now()
                 if reported_hashrate != dict['reported_hashrate']:
                     last_reported_hashrate = reported_hashrate
                     reported_hashrate = dict['reported_hashrate']
@@ -142,6 +147,8 @@ def monitor(args):
                 current_hashrate) / 1000000, 2), round(float(last_current_hashrate) / 1000000, 2))
             rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('3 hour', round(float(
                 average_hashrate) / 1000000, 2), round(float(last_average_hashrate) / 1000000, 2))
+            rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('24 hour', round(float(
+                daily_hashrate) / 1000000, 2), round(float(last_daily_hashrate) / 1000000, 2))
             rows = rows + '<tr><td>{0}</td><td>{1} MHz/s</td><td>{2} MHz/s</td></tr>'.format('Reported', round(float(
                 reported_hashrate) / 1000000, 2), round(float(last_reported_hashrate) / 1000000, 2))
             rows = rows + '<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>'.format('Worker Status', online_count,
