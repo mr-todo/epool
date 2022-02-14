@@ -73,6 +73,7 @@ def monitor(args):
             <table border=1>
                 <tr><td>Updated Time</td><td>#UpdatedTime#</td></tr>
                 <tr><td>Time to Payout</td><td>#time_to_reach_min_payout#</td></tr>
+                <tr><td>Est Next Payout Time</td><td>#next_payout_time#</td></tr>
                 <tr><td>Gas Price</td><td>#current_gas_price#</td></tr>
             </table>
             """
@@ -102,8 +103,10 @@ def monitor(args):
                     last_eth_balance = eth_balance
                     eth_balance = round(dict['balances'][0]['amount'], 6)
                     updatedTime = datetime.datetime.now()
+                time_to_payout_in_min = int(float(dict['balances'][0]['payout']['time_to_reach_min_payout']) / 60)
                 time_to_payout = '{0} hours'.format(
-                    round(float(dict['balances'][0]['payout']['time_to_reach_min_payout']) / 3600, 2))
+                    round(time_to_payout_in_min / 60, 2))
+                next_payout_time = datetime.datetime.now() + datetime.timedelta(minutes=time_to_payout_in_min)
                 if dict['balances'][0]['payout']['current_gas_price'] is not None:
                     gas_price = str(round(dict['balances'][0]['payout']['current_gas_price'], 0))
             except:
@@ -157,6 +160,7 @@ def monitor(args):
             html_str = html_str.replace('#rows#', rows)
             html_str = html_str.replace('#UpdatedTime#', updatedTime.strftime('%Y-%m-%d %H:%M:%S'))
             html_str = html_str.replace('#time_to_reach_min_payout#', time_to_payout)
+            html_str = html_str.replace('#next_payout_time#', next_payout_time.strftime('%Y-%m-%d %H:%M:%S'))
             html_str = html_str.replace('#current_gas_price#', gas_price)
 
             Html_file = open("index.html", "w")
